@@ -62,11 +62,12 @@ plt.pie(df['class'].value_counts(), labels=df['class'].unique())
 plt.title('Distribution of Class Attribute')
 plt.show()
 
-# Relationship between the price and maintenance cost of the cars
-plt.scatter(df['buying'], df['maint'])
-plt.xlabel('Buying')
-plt.ylabel('Maint')
-plt.title('Scatter Plot of Buying vs Maint')
+
+# Box plot of 'safety' and 'class' attributes
+sns.boxplot(x='class', y='safety', data=df)
+plt.xlabel('Class')
+plt.ylabel('Safety')
+plt.title('Box Plot of Safety vs Class')
 plt.show()
 
 df['doors'] = df['doors'].map({'2':2,'3':3,'4':4,'5more':5}) #Here 5 means 5 or more
@@ -84,6 +85,9 @@ def encode(col):
 ls_dc = []
 for i in obj_en:
   ls_dc.append(encode(i))
+ls_dc
+
+ls_dc = ls_dc[0:2] + [{'2':2,'3':3,'4':4,'5more':5}, {'2':2,'4':4,'more':5}] +ls_dc[2:]
 ls_dc
 
 df
@@ -282,16 +286,24 @@ selector.fit(X_train, y_train)
 # Print the selected features
 print(f'Selected features: {df.columns[:-1][selector.support_]}')
 
-# Define the new data to make predictions on
-new_data = pd.DataFrame([['vhigh', 'vhigh', '2', '2', 'small', 'low', 'unacc'],
-                         ['high', 'high', '4', 'more', 'big', 'high', 'acc'],
-                         ['low', 'low', '3', '2', 'med', 'med', 'good']])
+ls_dc
 
-# Encode the categorical features of the new data using one-hot encoding
-new_data = pd.get_dummies(new_data, columns=[0, 1, 2, 3, 4, 5])
+# Define the new data to make predictions on
+new_data = pd.DataFrame([['vhigh', 'vhigh', '2', '2', 'small', 'low', 'acc'],
+                         ['high', 'high', '4', 'more', 'big', 'high', 'vgood'],
+                         ['low', 'low', '3', '2', 'med', 'med', 'vgood']])
+
+for i in range(7):
+  new_data[i] = new_data[i].map(ls_dc[i])
+
+y_true = new_data[6]
+new_data = new_data.drop(6,axis=1)
 
 # Use the model to predict the labels for the new data
 new_data_pred = model2.predict(new_data)
 
+# Actual Label
+print(f'Actual Labels: {list(y_true)}') 
 # Print the predictions
 print(f'Predictions: {new_data_pred}')
+
