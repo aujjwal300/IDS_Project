@@ -10,16 +10,6 @@ Original file is located at
 from google.colab import drive
 drive.mount('/content/drive')
 
-# # importing the zipfile module
-# from zipfile import ZipFile
-  
-# # loading the temp.zip and creating a zip object
-# with ZipFile("/content/drive/MyDrive/Colab Notebooks/IDS/student.zip", 'r') as zObject:
-  
-#     # Extracting all the members of the zip 
-#     # into a specific location.
-#     zObject.extractall(path="/content/drive/MyDrive/Colab Notebooks/IDS/student")
-
 #Importing Libraries
 import numpy as np
 import pandas as pd
@@ -306,4 +296,3 @@ new_data_pred = model2.predict(new_data)
 print(f'Actual Labels: {list(y_true)}') 
 # Print the predictions
 print(f'Predictions: {new_data_pred}')
-
